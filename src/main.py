@@ -1,14 +1,37 @@
 from flask import Flask, render_template, redirect, request
 from scrapperJobs import get_jobs
 from exporter import save_to_file
+from scrapperReddit import get_subreddits
 
 app = Flask("Job Scrapper", template_folder="./src/templates")
 db={}
 
+subreddits = [
+    "javascript",
+    "reactjs",
+    "reactnative",
+    "programming",
+    "css",
+    "golang",
+    "flutter",
+    "rust",
+    "django",
+]
+
 @app.route('/')
 def index():
   try:
-    return render_template("home.html")
+    return render_template("home.html", subreddits=subreddits)
+  except IOError:
+    return redirect("/")
+
+@app.route('/reddit')
+def reddit():
+  subreddits = []
+  try:
+    aggregated_subreddits_dict = request.args.to_dict()
+    subreddits = get_subreddits(aggregated_subreddits_dict)
+    return render_template("reddit.html", subreddits=subreddits)
   except IOError:
     return redirect("/")
 
