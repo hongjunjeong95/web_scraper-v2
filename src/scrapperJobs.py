@@ -1,10 +1,10 @@
 from scrapperSO import get_SOJobs
 from scrapperWWR import get_WWRJobs
-from scrapperRemote import get_WWRJobs
+from scrapperRemote import get_RemoteJobs
 
-SO = get_SOJobs("python")
-WWR = get_WWRJobs("python")
-RemoteJobs = get_RemoteJobs("python")
-jobs = SO + WWR + RemoteJobs
-
-print(jobs)
+def get_jobs(word):
+  SO = get_SOJobs(word)
+  WWR = get_WWRJobs(word)
+  RemoteJobs = get_RemoteJobs(word)
+  jobs = SO + WWR + RemoteJobs
+  return jobs

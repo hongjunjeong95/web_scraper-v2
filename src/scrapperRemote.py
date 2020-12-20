@@ -45,7 +45,7 @@ def extract_jobs(url):
     
   return jobs
 
-def get_WWRJobs(word):
+def get_RemoteJobs(word):
   url = f"https://remoteok.io/remote-dev+{word}-jobs"
   jobs = extract_jobs(url)
   return jobs
