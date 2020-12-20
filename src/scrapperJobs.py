@@ -1,4 +1,7 @@
 from scrapperSO import get_SOJobs
+from scrapperWWR import get_WWRJobs
 
-jobs = get_SOJobs("python")
+SO = get_SOJobs("python")
+WWR = get_WWRJobs("python")
+jobs = SO+WWR
 print(jobs)
