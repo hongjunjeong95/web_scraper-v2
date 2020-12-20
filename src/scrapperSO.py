@@ -8,9 +8,32 @@ def get_last_page(url):
   last_page = pages[-2].get_text(strip=True)
   return int(last_page)
 
+def extract_job(html):
+  # title, company, location, link
+  title_link = html.find('h2').find('a',{'class':'s-link'})
+  title = title_link['title']
+  link = f"https://stackoverflow.com/jobs/{title_link['href']}"
+  company, location = html.find('h3', {"class":"fs-body1"}).find_all('span', recursive=False)
+  return {
+    "title" : title,
+    "link" : link,
+    "company" : company.get_text(strip=True),
+    "location" : location.get_text(strip=True)
+  }
+
+def extract_jobs(last_page,url):
+  jobs=[]
+  for page in range(last_page):
+    result = requests.get(f"{url}&pg={page+1}")
+    soup = BeautifulSoup(result.text, "html.parser")
+    results = soup.find_all("div",{"class":"-job"})
+    for result in results:
+      job = extract_job(result)
+      jobs.append(job)
+  return jobs
+
 def get_SOJobs(word):
   url = f"https://stackoverflow.com/jobs?q={word}"
   last_page = get_last_page(url)
-  print(last_page)
-
-get_SOJobs("python")
+  jobs = extract_jobs(last_page, url)
+  return jobs
